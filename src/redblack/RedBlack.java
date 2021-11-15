@@ -2,6 +2,7 @@ package redblack;
 
 import java.util.ArrayList;
 import java.util.Stack;
+import java.util.TreeMap;
 
 public class RedBlack<K extends Comparable<K>, V> {
     node<K, V> root;
@@ -160,6 +161,7 @@ public class RedBlack<K extends Comparable<K>, V> {
                     setcolor(parent(parent(n)), RED);
                     n = parent(parent(n));
                 } else {
+                    //l-r
                     if (n == rigthOf(parent(n))) {
                         n = parent(n);
                         rotateLeft(n);
@@ -266,7 +268,7 @@ public class RedBlack<K extends Comparable<K>, V> {
             n = s;
             //co hai con
         }
-        node<K, V> replace = n.left == null ? n.right : n.right;
+        node<K, V> replace = n.left == null ? n.left : n.right;
         if (replace != null) {
             replace.parent = n.parent;
             if (n.parent == null) {

@@ -1,5 +1,7 @@
 package stack;
 
+import java.util.Stack;
+
 public class ex1<T> {
     Object[] arr;
     int top;
@@ -74,60 +76,105 @@ public class ex1<T> {
         return e.isEmpty();
     }
 
-    int findMaxStack(String s) {
-        ex1<Character> e = new ex1<>();
-        int max = 0;
+
+//    public int findMaxRecursion(String s, int max, int l, int r, int c) {
+//        if (!s.isEmpty()) {
+//            if (l == r && l != 0 && r != 0) {
+//                if (c > 0) {
+//                    c = c + l + r;
+//                } else {
+//                    c = l + r;
+//                }
+//                l = r = 0;
+//                max = Math.max(max, c);
+//                if (s.charAt(0) == ')') {
+//                    c = 0;
+//                    return findMaxRecursion(s.substring(1), max, l, r, c);
+//                } else {
+//                    return findMaxRecursion(s.substring(1), max, l = l + 1, r, c);
+//                }
+//            } else if (l == 0 && r == 0 && s.charAt(0) == ')') {
+//                //c=0;
+//                return findMaxRecursion(s.substring(1), max, l, r, c);
+//            } else if (s.charAt(0) == '(') {
+//                return findMaxRecursion(s.substring(1), max, l = l + 1, r, c);
+//            } else {
+//                return findMaxRecursion(s.substring(1), max, l, r = r + 1, c);
+//            }
+//        }
+//        return max = l == r ? max + l + r : max;
+//    }
+
+    static int checkvalid(String s, int p) {
+        int i = 0;
         int k = 0;
-        for (int i = 0; i < s.length(); i++) {
-            if (e.isEmpty() && s.charAt(i) == ')') {
-                k = 0;
-            } else if (s.charAt(i) == '(') {
-                e.push(s.charAt(i));
-            } else {
-                e.pop();
-                k += 2;
+        int max = 0;
+        int start = 0;
+        for (int j = p; j < s.length(); j++) {
+            if (i == 0 && s.charAt(j) == ')') {
+
+                continue;
+
+            } else if (s.charAt(j) == '(') {
+                if (i == 0) {
+                    start = j;
+                }
+                i++;
+
+            } else if (s.charAt(j) == ')') {
+                i--;
             }
-            max = Math.max(max, k);
+            if (i == 0) {
+                k = j - start + 1 + k;
+                max = Math.max(k, max);
+
+                if (j + 1 < s.length() && s.charAt(j + 1) == ')') {
+                    k = 0;
+                }
+
+
+            }
+
         }
+
         return max;
     }
 
-    int findMaxRecursion(String s, int max, int l, int r, int c) {
-        if (!s.isEmpty()) {
-            if (l == r && l != 0 && r != 0) {
-                if (c > 0) {
-                    c = c + l + r;
-                } else {
-                    c = l + r;
+    static int ok(String s) {
+        int max = 0;
+        for (int i = 0; i < s.length(); i++) {
+            int res = checkvalid(s, i);
+            max = Math.max(max, res);
+        }
+        return max;
+    }
+    public static int longestValidParentheses(String s) {
+        Stack<Integer>stack=new Stack<>();
+        stack.push(-1);
+        int max=0;
+        for (int i = 0; i < s.length(); i++) {
+            if(s.charAt(i)=='('){
+                stack.push(i);
+            }else {
+                stack.pop();
+                if(stack.isEmpty()){
+                    stack.push(i);
                 }
-                l = r = 0;
-                max = Math.max(max, c);
-                if (s.charAt(0) == ')') {
-                    c = 0;
-                    return findMaxRecursion(s.substring(1), max, l, r, c);
-                } else {
-                    return findMaxRecursion(s.substring(1), max, l = l + 1, r, c);
+               else  {
+                    max=Math.max(max,i-stack.peek());
                 }
-            } else if (l == 0 && r == 0 && s.charAt(0) == ')') {
-                //c=0;
-                return findMaxRecursion(s.substring(1), max, l, r, c);
-            } else if (s.charAt(0) == '(') {
-                return findMaxRecursion(s.substring(1), max, l = l + 1, r, c);
-            } else {
-                return findMaxRecursion(s.substring(1), max, l, r = r + 1, c);
             }
         }
-        return max = l == r ? max + l + r : max;
+        return max;
     }
-
     public int size() {
         return this.size;
     }
 
     public static void main(String[] args) {
         ex1<Character> e = new ex1<>();
-        String s = "(()))(())()";
-        System.out.println(e.findMaxRecursion(s, 0, 0, 0, 0));
+        String s = ")()())";
+        System.out.println(longestValidParentheses(s));
 
 
     }
